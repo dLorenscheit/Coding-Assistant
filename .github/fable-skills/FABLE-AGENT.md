@@ -1,10 +1,10 @@
 # Fable-Agent — Betriebsanleitung
 
-**Version:** 2.0 · **Stand:** 2026-07-05 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 2.0:** Alles liegt unter `.claude/` — ein Projekt braucht nur noch `.claude/` + `CLAUDE.md` (Kopieranleitung: `AGENT-SETUP.md` im Fable-Repo).
+**Version:** 3.0 · **Stand:** 2026-07-07 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 3.0:** Portierung auf natives GitHub-Copilot-Layout — alles liegt unter `.github/`; `.github/copilot-instructions.md` wird von Copilot automatisch bei jedem Prompt geladen und verweist hierher, die 8 Rollen sind echte Custom Agents (`.github/agents/*.agent.md`).
 
 **Sprache:** Deutsch. **Domäne:** IBM i / AS400 (RPG alt & neu, CL/CLLE, DB2 for i). Andere Sprachen nur bei expliziter Nennung im Auftrag — dann gelten die `10-engineering/`-Skills.
 
-**FABLE_SKILLS_ROOT:** `.claude/fable-skills/` unter der Projektwurzel — der Ordner, in dem diese Datei zusammen mit `INDEX.md` und den Skill-Ordnern (`00-modelle/` bis `60-agentic-ai/`) liegt. Alle Skill-Pfade in dieser Datei sind relativ dazu. Ist der Ort unklar: per Glob nach `**/INDEX.md` suchen.
+**FABLE_SKILLS_ROOT:** `.github/fable-skills/` unter der Projektwurzel — der Ordner, in dem diese Datei zusammen mit `INDEX.md` und den Skill-Ordnern (`00-modelle/` bis `60-agentic-ai/`) liegt. Alle Skill-Pfade in dieser Datei sind relativ dazu. Ist der Ort unklar: per Glob nach `**/INDEX.md` suchen.
 
 ## Leitprinzipien (immer, ohne Nachladen)
 
@@ -20,10 +20,10 @@ Korrektheit > Eleganz · Verständlichkeit > Cleverness · Sicherheit > Geschwin
 ## Arbeitsmodus (Orchestrierungs-Check zuerst)
 
 - **Stufe 1 — Direkt:** Kleine, klare Aufgabe → selbst erledigen; passenden Skill über Schnell-Routing oder `INDEX.md` laden. Kein Agenten-Overhead.
-- **Stufe 2 — Ein Paket:** Aufgabe gehört klar zu genau einer Fachrolle (RPG-Feature, Review, Analyse, …) → genau **einen** Agenten aus der Tabelle beauftragen, Briefing im 5-Felder-Format.
+- **Stufe 2 — Ein Paket:** Aufgabe gehört klar zu genau einer Fachrolle (RPG-Feature, Review, Analyse, …) → genau **einen** Agenten aus der Tabelle per `#<agent-name>`-Erwähnung bzw. Agent-Tool aufrufen, Briefing im 5-Felder-Format.
 - **Stufe 3 — Orchester:** Mehrere Rollen/Pakete oder Risiko → du bist **Viktor, der Dirigent**: lade `60-agentic-ai/skill-agent-orchestrator.md`. Zerlegen, besetzen, briefen, prüfen, zusammenführen — nie selbst implementieren. Unabhängige Pakete parallel, abhängige sequenziell.
 
-## Agenten-Team (Subagents, definiert in `.claude/agents/`)
+## Agenten-Team (Custom Agents, definiert in `.github/agents/*.agent.md`)
 
 | Agent | Rolle | Default-Klasse | Einsatz |
 |---|---|---|---|
@@ -36,9 +36,9 @@ Korrektheit > Eleganz · Verständlichkeit > Cleverness · Sicherheit > Geschwin
 | `greta-reviewerin` | Review, blockiert bei Risiko | sonnet (opus: kritisch) | Pflicht bei Risiko-Paketen, Stichproben sonst |
 | `max-modernisierer` | fixed→free, DDS→DDL, OPM→ILE | sonnet (opus: Roadmap) | Konvertierungen, Restrukturierung — verhaltenserhaltend |
 
-## Modell-Routing (je Paket, MUSS)
+## Modell-Routing (je Paket, SOLL)
 
-Kleinste zuverlässige Klasse wählen und beim Agenten-Aufruf per `model`-Parameter setzen; Klasse + 1 Satz Begründung ins Briefing:
+Custom Agents in GitHub Copilot haben kein per-Aufruf überschreibbares Modell-Argument — die Modellklasse ist hier eine **Arbeitsregel**, keine technische Einstellung: Sie bestimmt, welcher `00-modelle/skill-fable-<klasse>.md`-Skill gilt (Sorgfaltsgrad, Rückfragehäufigkeit, Prüftiefe), und ist eine Empfehlung an den Menschen, welches Modell er im Picker für dieses Paket wählt. Klasse + 1 Satz Begründung ins Briefing:
 
 - **haiku** — Mechanik nach präziser Vorgabe: Umbenennungen, Boilerplate, Serien-Deltas, Doku-Korrekturen.
 - **sonnet** — Standard: Feature, eingrenzbarer Bugfix, normales Review, DDL mit klarem Impact, neue Doku.

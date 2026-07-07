@@ -1,33 +1,28 @@
 # install-fable.ps1 — installiert das Fable-Skill-System PROJEKTLOKAL in ein Zielprojekt.
 #
-# Seit Layout 2.0 liegt alles unter .claude\ — manuell genuegt daher:
-#   .claude\  und  CLAUDE.md  aus dem Fable-Repo ins Zielprojekt kopieren.
+# Seit Layout 4.0 liegt alles unter .github\ (natives GitHub-Copilot-Layout) - manuell genuegt daher:
+#   .github\ aus dem Fable-Repo ins Zielprojekt kopieren.
 # Dieses Skript macht dasselbe, aber sicher und idempotent:
-#   - ueberschreibt keine fremden Dateien in .claude\ (nur agents-Dateien + fable-skills\)
-#   - haengt bei vorhandener Projekt-CLAUDE.md nur den Fable-Block an (nie doppelt)
-#   - warnt bei Altlasten aus dem 1.x-Layout (<Projekt>\fable-skills\)
+#   - ueberschreibt keine fremden Dateien in .github\ (nur agents\ + fable-skills\)
+#   - haengt bei vorhandener Projekt-copilot-instructions.md nur den Fable-Block an (nie doppelt)
+#   - warnt bei Altlasten aus dem Vorgaenger-Layout (<Projekt>\.copilot\, <Projekt>\fable-skills\)
 #
 # Nutzung (aus dem Fable-Skills-Ordner heraus):
 #   powershell -File .\install-fable.ps1 -Target "<Pfad zum Zielprojekt>"
 #
 # Erneut ausfuehren, um ein Projekt nach Aenderungen im Fable-Repo zu aktualisieren
-# (Kopien werden ersetzt; die Projekt-CLAUDE.md bleibt unangetastet).
-#
-# Optional: -RemoveGlobal entfernt die 8 Fable-Agenten aus ~\.claude\agents\
-# (Altbestand der frueheren globalen Installation — projektlokale Agenten genuegen).
+# (Kopien werden ersetzt; die Projekt-copilot-instructions.md bleibt unangetastet).
 
 param(
     [Parameter(Mandatory = $true)]
-    [string]$Target,
-
-    [switch]$RemoveGlobal
+    [string]$Target
 )
 
 $ErrorActionPreference = 'Stop'
 
 $sourceRoot   = $PSScriptRoot
-$agentsSource = Join-Path $sourceRoot '.claude\agents'
-$skillsSource = Join-Path $sourceRoot '.claude\fable-skills'
+$agentsSource = Join-Path $sourceRoot '.github\agents'
+$skillsSource = Join-Path $sourceRoot '.github\fable-skills'
 
 # --- Quelle und Zielprojekt pruefen ------------------------------------------
 
@@ -51,20 +46,20 @@ if ($tgtNorm -eq $srcNorm -or $tgtNorm.StartsWith($srcNorm + '\')) {
     exit 1
 }
 
-# --- 1. Skills -> <Projekt>\.claude\fable-skills\ (komplett ersetzen) --------
+# --- 1. Skills -> <Projekt>\.github\fable-skills\ (komplett ersetzen) --------
 
-$skillsTarget = Join-Path $targetRoot '.claude\fable-skills'
+$skillsTarget = Join-Path $targetRoot '.github\fable-skills'
 if (Test-Path $skillsTarget) {
     Remove-Item -Path $skillsTarget -Recurse -Force
 }
-New-Item -ItemType Directory -Force -Path (Join-Path $targetRoot '.claude') | Out-Null
-Copy-Item -Path $skillsSource -Destination (Join-Path $targetRoot '.claude') -Recurse -Force
+New-Item -ItemType Directory -Force -Path (Join-Path $targetRoot '.github') | Out-Null
+Copy-Item -Path $skillsSource -Destination (Join-Path $targetRoot '.github') -Recurse -Force
 Write-Host "Skills + INDEX.md + Betriebsanleitung -> $skillsTarget"
 
-# --- 2. Subagenten -> <Projekt>\.claude\agents\ (nur eigene Dateien) ---------
+# --- 2. Custom Agents -> <Projekt>\.github\agents\ (nur eigene Dateien) ------
 
-$agentsTarget = Join-Path $targetRoot '.claude\agents'
-$agents = Get-ChildItem -Path $agentsSource -Filter '*.md'
+$agentsTarget = Join-Path $targetRoot '.github\agents'
+$agents = Get-ChildItem -Path $agentsSource -Filter '*.agent.md'
 if ($agents.Count -eq 0) {
     Write-Error "Keine Agenten-Dateien in $agentsSource gefunden."
     exit 1
@@ -74,58 +69,53 @@ New-Item -ItemType Directory -Force -Path $agentsTarget | Out-Null
 foreach ($agent in $agents) {
     Copy-Item -Path $agent.FullName -Destination (Join-Path $agentsTarget $agent.Name) -Force
 }
-Write-Host "$($agents.Count) Subagenten -> $agentsTarget"
+Write-Host "$($agents.Count) Custom Agents -> $agentsTarget"
 
-# --- 3. Projekt-CLAUDE.md (anlegen bzw. Fable-Block anhaengen) ---------------
+# --- 3. Projekt-copilot-instructions.md (anlegen bzw. Fable-Block anhaengen) -
 
-$projectClaudeMd = Join-Path $targetRoot 'CLAUDE.md'
-$importLine = '@.claude/fable-skills/FABLE-AGENT.md'
+$projectInstructions = Join-Path $targetRoot '.github\copilot-instructions.md'
+$marker = '## Fable-Agent (aktiv'
 $block = @'
-## Fable-Agent (aktiv)
 
-@.claude/fable-skills/FABLE-AGENT.md
+## Fable-Agent (aktiv — GitHub Copilot)
 
-Dieses Projekt nutzt das Fable-Skill-System als Coding-Agent (projektlokal, alles unter `.claude/`).
-Falls der Import oben nicht automatisch geladen wurde: Lies zu Sitzungsbeginn
-`.claude/fable-skills/FABLE-AGENT.md` und befolge sie.
+Dieses Projekt betreibt das **Fable-Skill-System** als tokeneffizienten Coding-Agenten. Diese Datei wird von GitHub Copilot bei **jedem** Prompt automatisch geladen und ist der verbindliche Einstieg.
+
+### Pflicht zu Sitzungsbeginn
+
+Lies **einmalig** die vollständige Betriebsanleitung `.github/fable-skills/FABLE-AGENT.md` und befolge sie für die gesamte Sitzung. Findest du den Ordner nicht auf Anhieb, suche per Glob nach `**/fable-skills/FABLE-AGENT.md` bzw. `**/INDEX.md`.
+
+**FABLE_SKILLS_ROOT:** `.github/fable-skills/` — alle Skill-Pfade sind relativ dazu. Die 8 Fachrollen sind echte VS-Code-Custom-Agents unter `.github/agents/*.agent.md` — aufrufbar per `#agent`-Erwähnung im Chat oder über den Agenten-Picker.
 '@
 
-if (Test-Path $projectClaudeMd) {
-    $existing = Get-Content -Path $projectClaudeMd -Raw
-    if ($existing -like "*$importLine*") {
-        Write-Host "Projekt-CLAUDE.md enthaelt den Fable-Import bereits - unveraendert."
+if (Test-Path $projectInstructions) {
+    $existing = Get-Content -Path $projectInstructions -Raw
+    if ($existing -like "*$marker*") {
+        Write-Host "Projekt-copilot-instructions.md enthaelt den Fable-Block bereits - unveraendert."
     } else {
-        Add-Content -Path $projectClaudeMd -Value "`r`n$block" -Encoding UTF8
-        Write-Host "Fable-Block an bestehende Projekt-CLAUDE.md angehaengt."
-        if ($existing -like '*fable-skills/CLAUDE.md*') {
-            Write-Host "HINWEIS: Alter Fable-Block (1.x, verweist auf fable-skills/CLAUDE.md) in der Projekt-CLAUDE.md gefunden - bitte manuell entfernen."
-        }
+        Add-Content -Path $projectInstructions -Value $block -Encoding UTF8
+        Write-Host "Fable-Block an bestehende Projekt-copilot-instructions.md angehaengt."
     }
 } else {
-    Copy-Item -Path (Join-Path $sourceRoot 'CLAUDE.md') -Destination $projectClaudeMd -Force
-    Write-Host "Projekt-CLAUDE.md aus Vorlage angelegt."
+    Copy-Item -Path (Join-Path $sourceRoot '.github\copilot-instructions.md') -Destination $projectInstructions -Force
+    Write-Host "Projekt-copilot-instructions.md aus Vorlage angelegt."
 }
 
-# --- 4. Altlasten aus dem 1.x-Layout melden ----------------------------------
+# --- 4. Altlasten aus Vorgaenger-Layouts melden ------------------------------
 
+$oldCopilotDir = Join-Path $targetRoot '.copilot'
+if (Test-Path $oldCopilotDir) {
+    Write-Host "HINWEIS: Altes Layout gefunden: $oldCopilotDir - wird nicht mehr benutzt und kann nach Pruefung geloescht werden."
+}
+$oldCopilotMd = Join-Path $targetRoot 'COPILOT.md'
+if (Test-Path $oldCopilotMd) {
+    Write-Host "HINWEIS: Alte COPILOT.md gefunden: $oldCopilotMd - Inhalte pruefen und danach loeschen (ersetzt durch .github\copilot-instructions.md)."
+}
 $oldSkills = Join-Path $targetRoot 'fable-skills'
 if (Test-Path $oldSkills) {
-    Write-Host "HINWEIS: Altes Layout gefunden: $oldSkills - wird nicht mehr benutzt und kann nach Pruefung geloescht werden."
-}
-
-# --- Optional: Altbestand der globalen Installation entfernen ----------------
-
-if ($RemoveGlobal) {
-    $globalAgents = Join-Path $env:USERPROFILE '.claude\agents'
-    foreach ($agent in $agents) {
-        $globalCopy = Join-Path $globalAgents $agent.Name
-        if (Test-Path $globalCopy) {
-            Remove-Item -Path $globalCopy -Force
-            Write-Host "Global entfernt: $($agent.Name)"
-        }
-    }
+    Write-Host "HINWEIS: Sehr altes Layout gefunden: $oldSkills - wird nicht mehr benutzt und kann nach Pruefung geloescht werden."
 }
 
 Write-Host ""
 Write-Host "Fable-Agent projektlokal installiert in: $targetRoot"
-Write-Host "Verfuegbar nach dem naechsten Start von Claude Code im Zielprojekt."
+Write-Host "Verfuegbar nach dem naechsten Start von GitHub Copilot im Zielprojekt."

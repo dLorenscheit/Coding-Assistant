@@ -1,6 +1,6 @@
 # Fable Skills — Strukturierte Senior-Wissensübergabe
 
-**Version:** 1.4 · **Stand:** 2026-07-05 · **Sprache:** Deutsch · **Pflege:** Bei jeder inhaltlichen Änderung Version und Datum in der betroffenen Datei anheben. · **Änderung 1.1:** Neue Schicht `60-agentic-ai/` (Orchestrator, Modell-Routing, Kontext-Budget, 8 Agenten-Rollen mit IBM-i-Fokus). · **Änderung 1.2:** Agent-Harness für Claude Code: Betriebsanleitung, `.claude/agents/` (8 Subagenten), `AGENT-SETUP.md` (Nutzung in anderen Projekten). · **Änderung 1.3:** Agent-Setup pfadunabhängig und projektlokal: `install-fable.ps1` kopiert Skills + Subagenten + Betriebsanleitung ins Zielprojekt; FABLE_SKILLS_ROOT wird relativ aufgelöst. · **Änderung 1.4:** Layout 2.0 — alles liegt unter `.claude/` (`.claude/fable-skills/` mit Skills, INDEX und Betriebsanleitung `FABLE-AGENT.md`); ein neues Projekt braucht nur noch `.claude\` + `CLAUDE.md` kopieren.
+**Version:** 1.6 · **Stand:** 2026-07-07 · **Sprache:** Deutsch · **Pflege:** Bei jeder inhaltlichen Änderung Version und Datum in der betroffenen Datei anheben. · **Änderung 1.1:** Neue Schicht `60-agentic-ai/` (Orchestrator, Modell-Routing, Kontext-Budget, 8 Agenten-Rollen mit IBM-i-Fokus). · **Änderung 1.2:** Agent-Harness für Claude Code: Betriebsanleitung, `.claude/agents/` (8 Subagenten), `AGENT-SETUP.md` (Nutzung in anderen Projekten). · **Änderung 1.3:** Agent-Setup pfadunabhängig und projektlokal: `install-fable.ps1` kopiert Skills + Subagenten + Betriebsanleitung ins Zielprojekt; FABLE_SKILLS_ROOT wird relativ aufgelöst. · **Änderung 1.4:** Layout 2.0 — alles liegt unter `.claude/` (`.claude/fable-skills/` mit Skills, INDEX und Betriebsanleitung `FABLE-AGENT.md`); ein neues Projekt braucht nur noch `.claude\` + `CLAUDE.md` kopieren. · **Änderung 1.5:** Portierung auf GitHub Copilot — `.copilot/` statt `.claude/`, `COPILOT.md` statt `CLAUDE.md`, Agent-Dateien angepasst. · **Änderung 1.6:** Natives Copilot-Layout — alles liegt unter `.github/`; `copilot-instructions.md` wird von Copilot automatisch geladen (kein Lader/Import mehr nötig), die 8 Rollen sind echte Custom Agents (`*.agent.md`) mit rollenspezifischen Tool-Grenzen.
 
 ## Was dieses Repository ist
 
@@ -48,7 +48,7 @@ Jede Skill-Datei folgt exakt dieser Gliederung:
 
 Skills sind Arbeitsmittel, kein Lesestoff. Damit Modelle sie mit minimalem Kontextverbrauch nutzen:
 
-1. **Einstieg über [INDEX.md](.claude/fable-skills/INDEX.md):** Dort steht pro Skill ein Einzeiler. Skill dort auswählen — pro Aufgabe 1, maximal 2 Dateien laden. Nie „alle Skills zur Sicherheit".
+1. **Einstieg über [INDEX.md](.github/fable-skills/INDEX.md):** Dort steht pro Skill ein Einzeiler. Skill dort auswählen — pro Aufgabe 1, maximal 2 Dateien laden. Nie „alle Skills zur Sicherheit“.
 2. **Operativer Kern zuerst:** In jeder Datei genügen für die Arbeit **Kurzfassung → Kernregeln → Checkliste**. Denkweise, Typische Fehler und Beispiele nur nachladen, wenn eine Regel unklar ist oder ein Junior sie erklärt bekommen soll.
 3. **Anwenden, nicht zitieren:** Regeln umsetzen; keine Skill-Passagen in Antworten, Diffs oder Berichte kopieren.
 4. **Verweisen statt wiederholen:** Querverweise (`skill-x.md`) nur folgen, wenn die Aufgabe es wirklich verlangt.
@@ -65,18 +65,18 @@ Die Schicht `60-agentic-ai/` definiert ein Multi-Agent-System auf Basis der übr
 
 **Domänenfokus:** IBM i / AS400 — RPG (RPG III/RPG/400 bis Free-Format), CL/CLLE, DB2 for i (SQL und DDS), Systemkommandos. Andere Sprachen sind möglich, wenn der Auftrag sie explizit nennt; dann gelten die `10-engineering/`-Skills.
 
-**Betrieb als Claude-Code-Agent:** Die Schicht ist als lauffähiges Agent-Harness ausgeprägt — [CLAUDE.md](CLAUDE.md) ist ein schlanker Lader, der die Betriebsanleitung [.claude/fable-skills/FABLE-AGENT.md](.claude/fable-skills/FABLE-AGENT.md) importiert (Skill-Protokoll, Arbeitsmodus, Routing, Übergabeformate); die acht Rollen liegen als Subagenten in `.claude/agents/`, der Orchestrator Viktor wird von der Haupt-Instanz übernommen. Ein neues Projekt braucht nur `.claude\` + `CLAUDE.md` — Einrichtung und Nutzung: [AGENT-SETUP.md](AGENT-SETUP.md).
+**Betrieb als GitHub-Copilot-Agent:** Die Schicht ist als lauffähiges Agent-Harness ausgeprägt — [.github/copilot-instructions.md](.github/copilot-instructions.md) wird von GitHub Copilot bei jedem Prompt automatisch geladen und verweist auf die Betriebsanleitung [.github/fable-skills/FABLE-AGENT.md](.github/fable-skills/FABLE-AGENT.md) (Skill-Protokoll, Arbeitsmodus, Routing, Übergabeformate); die acht Rollen liegen als echte Custom Agents in `.github/agents/*.agent.md`, der Orchestrator Viktor wird von der Haupt-Instanz übernommen. Ein neues Projekt braucht nur den Ordner `.github\` — Einrichtung und Nutzung: [AGENT-SETUP.md](AGENT-SETUP.md).
 
 ## Ordnerstruktur
 
 ```
 Fable Skills/                        (Struktur = 1:1 die eines Zielprojekts)
 ├── README.md                        ← diese Datei (nur im Repo)
-├── CLAUDE.md                        ← schlanker Lader: importiert die Betriebsanleitung (automatisch geladen)
 ├── AGENT-SETUP.md                   ← Einrichtung/Nutzung des Agenten in anderen Projekten (nur im Repo)
 ├── install-fable.ps1                ← Komfort-Installer für Merge-Fälle und Updates (nur im Repo)
-└── .claude/
-    ├── agents/                      ← 8 Subagenten: Paula, Willi, Klara, Erwin, Ingrid, Bruno, Greta, Max
+└── .github/
+    ├── copilot-instructions.md      ← wird von GitHub Copilot automatisch bei jedem Prompt geladen
+    ├── agents/                      ← 8 Custom Agents (*.agent.md): Paula, Willi, Klara, Erwin, Ingrid, Bruno, Greta, Max
     └── fable-skills/                ← FABLE_SKILLS_ROOT: Betriebsanleitung + Wissensbasis
         ├── FABLE-AGENT.md           ← Betriebsanleitung des Agent-Harness
         ├── INDEX.md                 ← Einstiegspunkt: ein Einzeiler pro Skill
@@ -151,7 +151,7 @@ Fable Skills/                        (Struktur = 1:1 die eines Zielprojekts)
 
 ## Status der Dateien
 
-**Vollständig (Stand 2026-07-03):** Alle 60 Skill-Dateien sind erstellt — 3 Modell-Skills, 16 Engineering, 8 Delivery, 6 Dokumentation, 8 Review/Analyse, 8 Clean Code, 11 Agentic AI — plus [INDEX.md](.claude/fable-skills/INDEX.md) als tokeneffizienter Einstiegspunkt (ein Einzeiler pro Skill).
+**Vollständig (Stand 2026-07-03):** Alle 60 Skill-Dateien sind erstellt — 3 Modell-Skills, 16 Engineering, 8 Delivery, 6 Dokumentation, 8 Review/Analyse, 8 Clean Code, 11 Agentic AI — plus [INDEX.md](.github/fable-skills/INDEX.md) als tokeneffizienter Einstiegspunkt (ein Einzeiler pro Skill).
 
 Jede Datei trägt direkt unter den Metadaten eine einzeilige **Kurzfassung**; der operative Kern jeder Datei ist Kurzfassung → Kernregeln → Checkliste (siehe „Tokeneffiziente Nutzung durch Agents").
 
