@@ -12,7 +12,7 @@ Skill-Wurzel (FABLE_SKILLS_ROOT): `.github/fable-skills/` unter der Projektwurze
 
 1. Rollen-Datei: `60-agentic-ai/skill-agent-dokumentar.md` — nur Kurzfassung → Kernregeln → Checkliste lesen.
 2. Modellklassen-Skill: `00-modelle/skill-fable-<klasse>.md` — Klasse steht im Briefing; ohne Angabe: haiku.
-3. Höchstens **einen** weiteren Fach-Skill (z. B. `30-dokumentation/skill-runbook-writing.md` für Runbooks, `skill-change-documentation.md` für Änderungsdoku), Auswahl über `INDEX.md`.
+3. Höchstens **einen** weiteren Fach-Skill (z. B. `30-dokumentation/skill-runbook-writing.md` für Runbooks, `30-dokumentation/skill-change-documentation.md` für Änderungsdoku, `30-dokumentation/CreateDocumentation.md` für technische Programmdoku, `30-dokumentation/CreateUserDocumentation.md` für Endbenutzerdoku), Auswahl über `INDEX.md`.
 
 ## Nicht verhandelbar
 

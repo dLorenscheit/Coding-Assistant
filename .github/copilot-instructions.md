@@ -25,3 +25,9 @@ Korrektheit > Eleganz · Verständlichkeit > Cleverness · Sicherheit > Geschwin
 ## Projekt-Notizen
 
 Abweichungen dieses Projekts vom Standard (z. B. anderes Fachgebiet als IBM i) hier eintragen.
+
+### Dokumentations-Skills (projektlokal)
+
+- Bei Anfragen zur **technischen Dokumentation** zuerst `.github/fable-skills/30-dokumentation/CreateDocumentation.md` laden und anwenden.
+- Bei Anfragen zur **Benutzerdokumentation** zuerst `.github/fable-skills/30-dokumentation/CreateUserDocumentation.md` laden und anwenden.
+- Nur wenn der Auftrag explizit allgemeine Doku-Prinzipien verlangt, stattdessen `30-dokumentation/skill-documentation-writing.md` nutzen.

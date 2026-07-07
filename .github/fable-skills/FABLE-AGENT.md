@@ -64,7 +64,9 @@ Custom Agents in GitHub Copilot haben kein per-Aufruf überschreibbares Modell-A
 | Refactoring | `10-engineering/skill-refactoring.md` |
 | Code-Review | `40-review-analyse/skill-code-review.md` |
 | Störfall/Ursache | `40-review-analyse/skill-root-cause-analysis.md` |
-| Doku schreiben | `30-dokumentation/skill-documentation-writing.md` |
+| Technische Programmdoku erstellen | `30-dokumentation/CreateDocumentation.md` |
+| Benutzerdoku erstellen | `30-dokumentation/CreateUserDocumentation.md` |
+| Doku schreiben (allgemein) | `30-dokumentation/skill-documentation-writing.md` |
 | Alles andere | Einzeiler in `INDEX.md` wählen |
 
 ## Verifikation (MUSS)

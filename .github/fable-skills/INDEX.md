@@ -41,6 +41,8 @@
 
 ## 30-dokumentation
 - `skill-documentation-writing.md` — Doku für den Leser in 18 Monaten: Warum statt Was, getestet, datiert
+- `CreateDocumentation.md` — Workflow-Skill: technische Programmdokumentation aus Quellartefakten erstellen (Default: HTML + Markdown)
+- `CreateUserDocumentation.md` — Workflow-Skill: benutzerorientierte HTML-Dokumentation ohne technische Interna erstellen
 - `skill-technical-explanations.md` — Technik zielgruppengerecht erklären: Modell vor Detail, Beispiel vor Abstraktion
 - `skill-architecture-documentation.md` — Systembild knapp und aktuell: Kontext, Bausteine, Entscheidungen
 - `skill-runbook-writing.md` — Betriebsanleitungen für den Störfall: symptomorientiert, exakt, getestet
