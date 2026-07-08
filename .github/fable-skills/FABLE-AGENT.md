@@ -1,10 +1,10 @@
 # Fable-Agent — Betriebsanleitung
 
-**Version:** 3.0 · **Stand:** 2026-07-07 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 3.0:** Portierung auf natives GitHub-Copilot-Layout — alles liegt unter `.github/`; `.github/copilot-instructions.md` wird von Copilot automatisch bei jedem Prompt geladen und verweist hierher, die 8 Rollen sind echte Custom Agents (`.github/agents/*.agent.md`).
+**Version:** 3.1 · **Stand:** 2026-07-08 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 3.0:** Portierung auf natives GitHub-Copilot-Layout — alles liegt unter `.github/`; `.github/copilot-instructions.md` wird von Copilot automatisch bei jedem Prompt geladen und verweist hierher, die 8 Rollen sind echte Custom Agents (`.github/agents/*.agent.md`). · **Änderung 3.1:** Neue Schicht `70-sprachreferenz/` (RPG-Syntax-Referenzen Free-/Fixed-Format) gegen dünne Trainingsdaten zu RPG/IBM i.
 
 **Sprache:** Deutsch. **Domäne:** IBM i / AS400 (RPG alt & neu, CL/CLLE, DB2 for i). Andere Sprachen nur bei expliziter Nennung im Auftrag — dann gelten die `10-engineering/`-Skills.
 
-**FABLE_SKILLS_ROOT:** `.github/fable-skills/` unter der Projektwurzel — der Ordner, in dem diese Datei zusammen mit `INDEX.md` und den Skill-Ordnern (`00-modelle/` bis `60-agentic-ai/`) liegt. Alle Skill-Pfade in dieser Datei sind relativ dazu. Ist der Ort unklar: per Glob nach `**/INDEX.md` suchen.
+**FABLE_SKILLS_ROOT:** `.github/fable-skills/` unter der Projektwurzel — der Ordner, in dem diese Datei zusammen mit `INDEX.md` und den Skill-Ordnern (`00-modelle/` bis `70-sprachreferenz/`) liegt. Alle Skill-Pfade in dieser Datei sind relativ dazu. Ist der Ort unklar: per Glob nach `**/INDEX.md` suchen.
 
 ## Leitprinzipien (immer, ohne Nachladen)
 
@@ -67,6 +67,8 @@ Custom Agents in GitHub Copilot haben kein per-Aufruf überschreibbares Modell-A
 | Technische Programmdoku erstellen | `30-dokumentation/CreateDocumentation.md` |
 | Benutzerdoku erstellen | `30-dokumentation/CreateUserDocumentation.md` |
 | Doku schreiben (allgemein) | `30-dokumentation/skill-documentation-writing.md` |
+| RPG-Syntax unsicher (Free-Format/SQLRPGLE) | `70-sprachreferenz/skill-rpg-syntax-free-format.md` |
+| RPG-Syntax unsicher (spaltengebunden RPG III/400) | `70-sprachreferenz/skill-rpg-syntax-fixed-format.md` |
 | Alles andere | Einzeiler in `INDEX.md` wählen |
 
 ## Verifikation (MUSS)

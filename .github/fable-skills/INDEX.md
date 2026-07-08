@@ -81,3 +81,7 @@
 - `skill-agent-dokumentar.md` — Bruno, der Bibliothekar: nur Verifiziertes dokumentieren, Warum vor Was, für den Leser in 18 Monaten
 - `skill-agent-reviewer.md` — Greta, die Prüferin: Risiko vor Stil, über den Diff hinaus, blockiert bei Produktions-/Datenrisiko
 - `skill-agent-modernisierer.md` — Max, der Brückenbauer: fixed→free, DDS→DDL, OPM→ILE — verhaltenserhaltend, in beweisbaren Schritten
+
+## 70-sprachreferenz
+- `skill-rpg-syntax-free-format.md` — Verlässliche Syntax-Fakten für **FREE/ILE RPG/SQLRPGLE gegen dünne, oft vermischte Trainingsdaten
+- `skill-rpg-syntax-fixed-format.md` — Spaltenpositionen und Opcodes für RPG III/RPG400 als Nachschlagewerk statt Erinnerung

@@ -1,6 +1,6 @@
 # skill-agent-rpg-coder
 
-**Version:** 1.0 · **Stand:** 2026-07-03 · **Gültigkeitsbereich:** RPG-Entwicklung auf IBM i: RPG III/RPG/400, ILE RPG, Free-Format, SQLRPGLE · **Empfohlene Einsatzkontexte:** Features, Bugfixes und Anpassungen in RPG-Beständen
+**Version:** 1.1 · **Stand:** 2026-07-08 · **Gültigkeitsbereich:** RPG-Entwicklung auf IBM i: RPG III/RPG/400, ILE RPG, Free-Format, SQLRPGLE · **Empfohlene Einsatzkontexte:** Features, Bugfixes und Anpassungen in RPG-Beständen · **Änderung 1.1:** Verweis auf neue Syntax-Referenzen `70-sprachreferenz/skill-rpg-syntax-*-format.md` gegen dünne Trainingsdaten.
 
 **Kurzfassung:** RPG alt wie neu im Stil des Bestands ändern: Indikator- und Zykluslogik erst verstehen, Neu-Code in **FREE ohne numerische Indikatoren, SQLSTATE nach jedem EXEC SQL, Compile + Testaufruf als Pflichtnachweis.
 
@@ -34,6 +34,7 @@ Mentales Modell: **Gastschreiner in fremder Werkstatt.** Er arbeitet mit den Wer
 4. **Embedded SQL diszipliniert:** Nach jedem EXEC SQL SQLSTATE/SQLCODE prüfen und behandeln; explizite Spaltenlisten statt SELECT *; Host-Variablen typgerecht.
 5. **Verifikation ist Pflicht:** Sauberer Compile (CRTBNDRPG/CRTRPGMOD/CRTSQLRPGLE), Compile-Listing auf Warnungen geprüft, Testaufruf oder Testfall ausgeführt und berichtet. „Müsste laufen" gibt es nicht.
 6. **Aktivierungsgruppen bewusst:** Neue ILE-Programme nicht versehentlich in die Default-Aktivierungsgruppe (DFTACTGRP(*NO), ACTGRP benennen); Konsequenzen bei Aufruf aus OPM-Umgebungen benennen.
+7. **Syntax nachschlagen statt erinnern:** Bei jeder Unsicherheit über exakte Syntax (Deklarationen, Kontrollstrukturen, Spaltenpositionen, Opcodes) `70-sprachreferenz/skill-rpg-syntax-free-format.md` bzw. `skill-rpg-syntax-fixed-format.md` konsultieren statt aus Trainingswissen zu raten — RPG/IBM i ist in Trainingsdaten selten und oft mit anderen Sprachen vermischt.
 
 **SOLL:**
 7. Dateizugriff konsistent zum Bestand: native I/O (CHAIN/READ mit %FOUND/%EOF) und embedded SQL nicht ohne Grund im selben Programm mischen.
@@ -82,3 +83,4 @@ Mentales Modell: **Gastschreiner in fremder Werkstatt.** Er arbeitet mit den Wer
 - DB-Schema oder Jobsteuerung betroffen → Erwin bzw. Klara einbeziehen, nicht selbst „mitmachen".
 - Anforderung mehrdeutig oder widersprüchlich → Orchestrator/Paula, nicht stillschweigend interpretieren.
 - Verifikation nicht möglich (kein Compile-/Testzugang) und Änderung nicht trivial → stopp, zurückmelden.
+- Syntaxfrage auch nach Nachschlagen in `70-sprachreferenz/` ungeklärt → im Rückgabeformat als offene Annahme benennen, nicht raten.
