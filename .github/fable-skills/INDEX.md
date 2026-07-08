@@ -51,7 +51,7 @@
 
 ## 40-review-analyse
 - `skill-code-review.md` — Schaden vor Merge verhindern: Risiko vor Stil, über den Diff hinaus lesen
-- `skill-program-analysis.md` — Code systematisch lesen: Leitfrage, Datenfluss, Belege mit Fundstelle
+- `skill-program-analysis.md` — Code systematisch lesen: Leitfrage, Datenfluss, Belege mit Fundstelle; bei großen Projekten Codemap Pflicht
 - `skill-root-cause-analysis.md` — Vom Symptom zur belegten Ursache: Zeitachse, Warum-Kette, Beweis
 - `skill-clean-code-analysis.md` — Qualität ökonomisch bewerten: kosmetisch vs. strukturell, Kontext zählt
 - `skill-static-analysis-thinking.md` — Wie ein Analyzer denken: Pfade, Null, Ressourcen; Tool-Befunde triagieren

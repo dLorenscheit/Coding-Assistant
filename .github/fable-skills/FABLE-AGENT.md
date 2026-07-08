@@ -1,6 +1,6 @@
 # Fable-Agent — Betriebsanleitung
 
-**Version:** 3.1 · **Stand:** 2026-07-08 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 3.0:** Portierung auf natives GitHub-Copilot-Layout — alles liegt unter `.github/`; `.github/copilot-instructions.md` wird von Copilot automatisch bei jedem Prompt geladen und verweist hierher, die 8 Rollen sind echte Custom Agents (`.github/agents/*.agent.md`). · **Änderung 3.1:** Neue Schicht `70-sprachreferenz/` (RPG-Syntax-Referenzen Free-/Fixed-Format) gegen dünne Trainingsdaten zu RPG/IBM i.
+**Version:** 3.2 · **Stand:** 2026-07-08 · **Zweck:** Macht das Fable-Skill-System als tokeneffizienten Coding-Agenten nutzbar — in jedem Projekt gleich. Keine absoluten Pfade, keine globale Installation. · **Änderung 3.0:** Portierung auf natives GitHub-Copilot-Layout — alles liegt unter `.github/`; `.github/copilot-instructions.md` wird von Copilot automatisch bei jedem Prompt geladen und verweist hierher, die 8 Rollen sind echte Custom Agents (`.github/agents/*.agent.md`). · **Änderung 3.1:** Neue Schicht `70-sprachreferenz/` (RPG-Syntax-Referenzen Free-/Fixed-Format) gegen dünne Trainingsdaten zu RPG/IBM i. · **Änderung 3.2:** Codemap-Pflicht für große Projekte in `skill-program-analysis.md` verankert (Routing-Zeile ergänzt).
 
 **Sprache:** Deutsch. **Domäne:** IBM i / AS400 (RPG alt & neu, CL/CLLE, DB2 for i). Andere Sprachen nur bei expliziter Nennung im Auftrag — dann gelten die `10-engineering/`-Skills.
 
@@ -69,6 +69,7 @@ Custom Agents in GitHub Copilot haben kein per-Aufruf überschreibbares Modell-A
 | Doku schreiben (allgemein) | `30-dokumentation/skill-documentation-writing.md` |
 | RPG-Syntax unsicher (Free-Format/SQLRPGLE) | `70-sprachreferenz/skill-rpg-syntax-free-format.md` |
 | RPG-Syntax unsicher (spaltengebunden RPG III/400) | `70-sprachreferenz/skill-rpg-syntax-fixed-format.md` |
+| Großes/unübersichtliches Projekt navigieren (Codemap prüfen/anlegen) | `40-review-analyse/skill-program-analysis.md` |
 | Alles andere | Einzeiler in `INDEX.md` wählen |
 
 ## Verifikation (MUSS)

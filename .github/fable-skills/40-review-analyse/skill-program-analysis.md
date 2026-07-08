@@ -1,8 +1,8 @@
 # skill-program-analysis
 
-**Version:** 1.0 · **Stand:** 2026-07-02 · **Gültigkeitsbereich:** Systematisches Lesen und Verstehen von fremdem Code · **Empfohlene Einsatzkontexte:** Einarbeitung, Fehlersuche-Vorbereitung, Impact-Analyse, Legacy-Erkundung, Review-Vorbereitung
+**Version:** 1.1 · **Stand:** 2026-07-08 · **Gültigkeitsbereich:** Systematisches Lesen und Verstehen von fremdem Code · **Empfohlene Einsatzkontexte:** Einarbeitung, Fehlersuche-Vorbereitung, Impact-Analyse, Legacy-Erkundung, Review-Vorbereitung · **Änderung 1.1:** Codemap für große Projekte von KANN auf MUSS angehoben — persistenter Projektüberblick statt einmaligem Landkarten-Wissen.
 
-**Kurzfassung:** Mit Leitfrage lesen, dem Datenfluss ab Einstiegspunkt folgen, jede Erkenntnis mit Fundstelle (Datei:Zeile) und Status ✅ belegt / ❓ vermutet festhalten, Unsicheres ausführen statt raten.
+**Kurzfassung:** Mit Leitfrage lesen, dem Datenfluss ab Einstiegspunkt folgen, jede Erkenntnis mit Fundstelle (Datei:Zeile) und Status ✅ belegt / ❓ vermutet festhalten, Unsicheres ausführen statt raten; bei großen Projekten zuerst eine Codemap anlegen/nutzen.
 
 ## Skill-Name
 
@@ -37,30 +37,32 @@ Drei Grundsätze:
 3. Vermutung und Beleg strikt trennen. Notationsvorschlag: ✅ belegt (gelesen/ausgeführt), ❓ vermutet (plausibel, ungeprüft). Vermutungen, auf denen etwas aufbauen soll, werden vor der Nutzung belegt.
 4. **Einstiegspunkte zuerst:** Wo betritt der relevante Fluss das System (HTTP-Route, Message-Handler, Scheduler, main)? Von dort dem Datenfluss folgen — nicht in der Mitte anfangen.
 5. Bei Verhaltensfragen, die sich durch Lesen nicht sicher klären lassen (Reflection, Vererbungs-Dickicht, dynamische Dispatch-Logik, SQL-Trigger): **ausführen statt raten** — Debugger, Wegwerf-Test oder Log-Ausgabe.
+6. **Bei großen Projekten (viele Module/Bibliotheken, unübersichtliche Struktur) muss vor der Detailarbeit eine Codemap erstellt und als Datei festgehalten werden:** ein kompakter Projektüberblick — welche Module/Bibliotheken es gibt, die wichtigsten Programme/Einstiegspunkte, wer mit wem spricht, wo was liegt. Zweck ist effiziente Navigation, nicht Vollständigkeit. Sie wird bei der ersten großen Erkundung angelegt und bei wesentlichen Strukturänderungen nachgeführt — nicht bei jeder Kleinigkeit.
 
 **SOLL:**
-6. In Schichten lesen: erst die Signaturen und Struktur eines Bereichs (was gibt es, was ruft was), dann gezielt die 2–3 Funktionen tief, die die Leitfrage betreffen. Nicht jede Funktion verdient Tiefenlektüre.
-7. Seiteneffekte aktiv suchen: Wer schreibt noch auf diese Daten? Statischer Zustand, Events, Trigger, Hintergrundjobs, zweite Schreibpfade. Die Frage „wer außer dem offensichtlichen Pfad fasst das an?" findet die bösen Überraschungen.
-8. Versionsgeschichte als Werkzeug nutzen: `git log`/`git blame` auf der fraglichen Stelle beantwortet „warum ist das so komisch?" oft schneller als jede Analyse — inkl. verlinktem Ticket.
-9. Ein kleines Diagramm oder eine Stichpunkt-Skizze des verstandenen Flusses anfertigen, sobald mehr als 4–5 Stationen beteiligt sind. Was man nicht skizzieren kann, hat man nicht verstanden.
-10. Beim Lesen auffällige Risiken (auskommentierter Code, TODO von 2019, doppelte Logik) als **Nebenbefunde** listen — nicht sofort beheben.
+7. In Schichten lesen: erst die Signaturen und Struktur eines Bereichs (was gibt es, was ruft was), dann gezielt die 2–3 Funktionen tief, die die Leitfrage betreffen. Nicht jede Funktion verdient Tiefenlektüre.
+8. Seiteneffekte aktiv suchen: Wer schreibt noch auf diese Daten? Statischer Zustand, Events, Trigger, Hintergrundjobs, zweite Schreibpfade. Die Frage „wer außer dem offensichtlichen Pfad fasst das an?" findet die bösen Überraschungen.
+9. Versionsgeschichte als Werkzeug nutzen: `git log`/`git blame` auf der fraglichen Stelle beantwortet „warum ist das so komisch?" oft schneller als jede Analyse — inkl. verlinktem Ticket.
+10. Ein kleines Diagramm oder eine Stichpunkt-Skizze des verstandenen Flusses anfertigen, sobald mehr als 4–5 Stationen beteiligt sind. Was man nicht skizzieren kann, hat man nicht verstanden.
+11. Beim Lesen auffällige Risiken (auskommentierter Code, TODO von 2019, doppelte Logik) als **Nebenbefunde** listen — nicht sofort beheben.
 
 **KANN:**
-11. Bei sehr großen Systemen zuerst „Landkarten-Wissen" aufbauen: Welche Module gibt es, welches spricht mit welchem, wo sind die Grenzen? Eine Stunde Landkarte spart viele Irrwege.
 12. Suchwerkzeuge intensiv nutzen (Referenzsuche, Grep nach Fehlermeldungstexten, nach Tabellennamen): Der schnellste Weg zum relevanten Code führt oft über einen String aus der Oberfläche oder dem Log.
 
 ## Arbeitsablauf
 
-1. **Leitfrage formulieren:** Was genau will ich wissen, und woran erkenne ich, dass ich fertig bin?
-2. **Einstiegspunkt finden:** Route, Handler, Job, UI-Text, Log-Meldung → per Suche in den Code.
-3. **Fluss verfolgen:** Einen konkreten Fall (ein Datum, ein Request) Station für Station verfolgen. Pro Station notieren: was passiert, Fundstelle, ✅/❓.
-4. **Abzweige kartieren, nicht besteigen:** Nebenpfade (Fehlerbehandlung, Sonderfälle) notieren; nur betreten, wenn die Leitfrage es verlangt.
-5. **Seiteneffekte prüfen:** Wer schreibt/liest dieselben Daten noch? (Suche nach Tabellen-/Feldnamen, Event-Namen.)
-6. **Unsicheres ausführen:** Offene ❓, die die Antwort tragen, per Debugger/Test/Log in ✅ verwandeln.
-7. **Ergebnis formulieren:** Antwort auf die Leitfrage in 3–10 Sätzen, mit Fundstellen, plus Liste der Nebenbefunde und der bewusst offen gelassenen Fragen.
+1. **Codemap prüfen (bei großen Projekten):** Existiert schon eine aktuelle? Nutzen. Sonst anlegen (Module/Bibliotheken, Einstiegspunkte, Abhängigkeiten) — bevor in die Tiefe gegangen wird.
+2. **Leitfrage formulieren:** Was genau will ich wissen, und woran erkenne ich, dass ich fertig bin?
+3. **Einstiegspunkt finden:** Route, Handler, Job, UI-Text, Log-Meldung → per Suche in den Code.
+4. **Fluss verfolgen:** Einen konkreten Fall (ein Datum, ein Request) Station für Station verfolgen. Pro Station notieren: was passiert, Fundstelle, ✅/❓.
+5. **Abzweige kartieren, nicht besteigen:** Nebenpfade (Fehlerbehandlung, Sonderfälle) notieren; nur betreten, wenn die Leitfrage es verlangt.
+6. **Seiteneffekte prüfen:** Wer schreibt/liest dieselben Daten noch? (Suche nach Tabellen-/Feldnamen, Event-Namen.)
+7. **Unsicheres ausführen:** Offene ❓, die die Antwort tragen, per Debugger/Test/Log in ✅ verwandeln.
+8. **Ergebnis formulieren:** Antwort auf die Leitfrage in 3–10 Sätzen, mit Fundstellen, plus Liste der Nebenbefunde und der bewusst offen gelassenen Fragen.
 
 ## Checkliste
 
+- [ ] Existiert bei einem großen Projekt eine aktuelle Codemap — oder wurde sie angelegt?
 - [ ] Hatte ich eine konkrete Leitfrage — und beantwortet mein Ergebnis genau sie?
 - [ ] Hat jede tragende Aussage eine Fundstelle?
 - [ ] Sind Vermutungen als Vermutungen markiert (und keine trägt die Kernaussage)?
@@ -78,6 +80,7 @@ Drei Grundsätze:
 - **Erinnerungs-Fundstellen:** „Das habe ich irgendwo im OrderService gesehen" — beim Wiederfinden stellt sich heraus: war der CustomerService, und es war andersherum. Deshalb sofort Datei:Zeile notieren.
 - **Analyse mit Nebenwirkungen:** Beim Erkunden „schnell mal" etwas umbenennen oder fixen. Analyse ist read-only; Änderungen kommen danach, geplant.
 - **Happy-Path-Blindheit:** Nur den Erfolgsfall verfolgen. Die Antwort auf viele Leitfragen („warum verschwinden Bestellungen?") liegt in den Fehler- und Sonderpfaden.
+- **Kein Gedächtnis für die Struktur:** Bei jeder neuen Aufgabe ein großes Projekt erneut von Null erkunden, statt eine vorhandene Codemap zu nutzen oder zu pflegen — kostet Zeit und Kontext doppelt.
 
 ## Beispiele
 
